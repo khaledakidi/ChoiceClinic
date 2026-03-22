@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choice Clinic — World-Class Medical Care in Istanbul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── DESIGN TOKENS ── */
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8D08A;
+  --gold-pale: #C9A84C18;
+  --border-gold: #C9A84C40;
+
+  /* Dark mode (default) */
+  --bg:       #0D0D0D;
+  --bg2:      #111111;
+  --bg3:      #161616;
+  --bg4:      #1C1C1C;
+  --text:     #F5F0E8;
+  --text-muted: #9A9080;
+  --text-dim: #5A5248;
+  --border:   #2a2520;
+  --nav-bg:   #0D0D0Df5;
+  --footer-bg:#080808;
+  --form-bg:  #111111;
+  --tag-color: #5A5248;
+  --shadow:   0 12px 40px #C9A84C30;
+}
+
+/* ── LIGHT MODE via media query ── */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg:       #FAFAF8;
+    --bg2:      #F2F0EB;
+    --bg3:      #E8E4DC;
+    --bg4:      #DEDAD0;
+    --text:     #1A1612;
+    --text-muted: #6B6258;
+    --text-dim: #9A9080;
+    --border:   #D8D0C4;
+    --nav-bg:   #FAFAf8f5;
+    --footer-bg:#1A1612;
+    --form-bg:  #F2F0EB;
+    --tag-color: #9A9080;
+    --shadow:   0 12px 40px #C9A84C20;
+  }
+}
+
+/* ── FORCED MODES (manual toggle override) ── */
+html[data-theme="light"] {
+  --bg: #FAFAF8; --bg2: #F2F0EB; --bg3: #E8E4DC; --bg4: #DEDAD0;
+  --text: #1A1612; --text-muted: #6B6258; --text-dim: #9A9080;
+  --border: #D8D0C4; --nav-bg: #FAFAf8f5; --footer-bg: #1A1612;
+  --form-bg: #F2F0EB; --tag-color: #9A9080; --shadow: 0 12px 40px #C9A84C20;
+}
+html[data-theme="dark"] {
+  --bg: #0D0D0D; --bg2: #111111; --bg3: #161616; --bg4: #1C1C1C;
+  --text: #F5F0E8; --text-muted: #9A9080; --text-dim: #5A5248;
+  --border: #2a2520; --nav-bg: #0D0D0Df5; --footer-bg: #080808;
+  --form-bg: #111111; --tag-color: #5A5248; --shadow: 0 12px 40px #C9A84C30;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; font-weight: 300; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
+
+/* ── LANG BAR ── */
+.lang-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--footer-bg); border-bottom: 1px solid var(--border);
+  display: flex; justify-content: flex-end; align-items: center;
+  padding: 8px 48px; gap: 4px;
+  transition: background 0.3s;
+}
+.lang-btn {
+  background: none; border: 1px solid transparent; color: var(--text-muted);
+  font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500;
+  letter-spacing: .1em; padding: 4px 12px; cursor: pointer; transition: all .3s;
+  text-transform: uppercase;
+}
+.lang-btn:hover, .lang-btn.active { color: var(--gold); border-color: var(--border-gold); }
+.lang-divider { color: var(--text-dim); font-size: 10px; }
+
+/* ── THEME TOGGLE ── */
+.theme-toggle {
+  display: flex; align-items: center; gap: 8px;
+  margin-right: auto; margin-left: 0;
+}
+.theme-toggle-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-muted); font-family: 'Montserrat', sans-serif;
+  font-size: 11px; font-weight: 500; letter-spacing: .1em;
+  padding: 4px 14px; cursor: pointer; transition: all .3s;
+  text-transform: uppercase; border-radius: 2px;
+  display: flex; align-items: center; gap: 6px;
+}
+.theme-toggle-btn:hover { color: var(--gold); border-color: var(--border-gold); }
+.theme-icon { font-size: 13px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 37px; left: 0; right: 0; z-index: 999;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 48px;
+  background: linear-gradient(to bottom, var(--bg)cc, transparent);
+  transition: background .4s, padding .4s, border-color .3s;
+}
+nav.scrolled {
+  background: var(--nav-bg); padding: 14px 48px;
+  border-bottom: 1px solid var(--border); backdrop-filter: blur(20px);
+}
+.nav-logo { cursor: pointer; }
+.nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.nav-links a {
+  color: var(--text-muted); text-decoration: none; font-size: 11px;
+  font-weight: 500; letter-spacing: .15em; text-transform: uppercase;
+  transition: color .3s; position: relative; cursor: pointer;
+  background: none; border: none; font-family: 'Montserrat', sans-serif;
+}
+.nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: var(--gold); transition: width .3s; }
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta { background: transparent !important; border: 1px solid var(--gold) !important; color: var(--gold) !important; padding: 10px 24px !important; }
+.nav-cta:hover { background: var(--gold) !important; color: var(--bg) !important; }
+.nav-cta::after { display: none !important; }
+
+/* ── HERO ── */
+.hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 120px 48px 80px; }
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 60% 40%, var(--gold-pale) 0%, transparent 60%),
+              linear-gradient(135deg, var(--bg) 0%, var(--bg2) 100%);
+  transition: background 0.3s;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 80px 80px; opacity: .35;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 70%);
+  transition: opacity 0.3s;
+}
+.hero-content { position: relative; z-index: 2; max-width: 700px; }
+.hero-eyebrow { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; opacity: 0; animation: fadeUp 1s .3s forwards; }
+.hero-eyebrow-line { width: 40px; height: 1px; background: var(--gold); }
+.hero-eyebrow span { font-size: 11px; font-weight: 500; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+.hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 7vw, 88px); font-weight: 300; line-height: 1.05; color: var(--text); margin-bottom: 28px; opacity: 0; animation: fadeUp 1s .5s forwards; }
+.hero h1 em { font-style: italic; color: var(--gold-light); }
+.hero-desc { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--text-muted); max-width: 500px; margin-bottom: 48px; opacity: 0; animation: fadeUp 1s .7s forwards; }
+.hero-actions { display: flex; gap: 20px; align-items: center; opacity: 0; animation: fadeUp 1s .9s forwards; }
+.btn-primary { background: var(--gold); color: #0D0D0D; border: none; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; padding: 16px 36px; cursor: pointer; transition: all .3s; text-decoration: none; display: inline-block; }
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: var(--shadow); }
+.btn-secondary { color: var(--text-muted); font-size: 11px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: color .3s; cursor: pointer; background: none; border: none; font-family: 'Montserrat', sans-serif; }
+.btn-secondary:hover { color: var(--gold); }
+.hero-stats { position: absolute; right: 48px; bottom: 80px; display: flex; flex-direction: column; gap: 32px; opacity: 0; animation: fadeLeft 1s 1.1s forwards; }
+.stat { text-align: right; border-right: 1px solid var(--border-gold); padding-right: 24px; }
+.stat-number { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: var(--gold); line-height: 1; }
+.stat-label { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; }
+
+/* ── MARQUEE ── */
+.marquee-section { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 18px 0; overflow: hidden; background: var(--bg2); transition: background 0.3s; }
+.marquee-track { display: flex; animation: marquee 25s linear infinite; white-space: nowrap; }
+.marquee-item { display: flex; align-items: center; gap: 32px; padding: 0 32px; font-size: 11px; font-weight: 500; letter-spacing: .25em; text-transform: uppercase; color: var(--text-dim); flex-shrink: 0; }
+.marquee-dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+
+/* ── SECTIONS ── */
+.section-eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.section-eyebrow-line { width: 30px; height: 1px; background: var(--gold); }
+.section-eyebrow span { font-size: 10px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
+.section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4vw, 56px); font-weight: 300; line-height: 1.1; color: var(--text); }
+.section-title em { font-style: italic; color: var(--gold-light); }
+.section-header { margin-bottom: 64px; }
+
+/* ── SERVICES ── */
+.services { padding: 120px 48px; background: var(--bg); transition: background 0.3s; }
+.services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.service-card { background: var(--bg2); padding: 48px 40px; position: relative; overflow: hidden; cursor: pointer; transition: background .4s; text-decoration: none; display: block; }
+.service-card::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transition: transform .4s; }
+.service-card:hover { background: var(--bg3); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-num { font-family: 'Cormorant Garamond', serif; font-size: 72px; font-weight: 300; color: var(--border); position: absolute; top: 24px; right: 32px; line-height: 1; transition: color .4s; }
+.service-card:hover .service-num { color: var(--border-gold); }
+.service-icon { width: 48px; height: 48px; margin-bottom: 24px; color: var(--gold); }
+.service-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--text); margin-bottom: 16px; line-height: 1.2; }
+.service-desc { font-size: 13px; font-weight: 300; line-height: 1.8; color: var(--text-muted); margin-bottom: 28px; }
+.service-procedures { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+.procedure-tag { font-size: 10px; font-weight: 500; letter-spacing: .1em; color: var(--tag-color); border: 1px solid var(--border); padding: 4px 12px; text-transform: uppercase; transition: all .3s; }
+.service-card:hover .procedure-tag { border-color: var(--border-gold); color: var(--gold); }
+.service-link { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); display: flex; align-items: center; gap: 8px; }
+
+/* ── WHY ── */
+.why { padding: 120px 48px; background: var(--bg2); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; transition: background 0.3s; }
+.why-visual { position: relative; }
+.why-img-frame { width: 100%; aspect-ratio: 4/5; background: var(--bg3); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+.why-img-placeholder { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--text-dim); text-align: center; padding: 40px; font-style: italic; }
+.why-badge { position: absolute; bottom: -24px; right: -24px; background: var(--gold); color: #0D0D0D; padding: 24px; text-align: center; width: 160px; }
+.why-badge-num { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; line-height: 1; display: block; }
+.why-badge-text { font-size: 9px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-top: 6px; display: block; line-height: 1.4; }
+.why-content { padding-left: 20px; }
+.why-points { display: flex; flex-direction: column; gap: 32px; margin-top: 48px; }
+.why-point { display: flex; gap: 20px; align-items: flex-start; }
+.why-point-icon { width: 40px; height: 40px; border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--gold); }
+.why-point-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--text); margin-bottom: 6px; }
+.why-point-text { font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--text-muted); }
+
+/* ── PROCESS ── */
+.process { padding: 120px 48px; background: var(--bg); transition: background 0.3s; }
+.process-steps { display: grid; grid-template-columns: repeat(5,1fr); margin-top: 64px; position: relative; }
+.process-steps::before { content: ''; position: absolute; top: 32px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--border-gold), transparent); }
+.process-step { padding: 0 24px; text-align: center; }
+.step-num { width: 64px; height: 64px; border: 1px solid var(--border-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--gold); background: var(--bg); position: relative; z-index: 1; transition: all .3s; }
+.process-step:hover .step-num { background: var(--gold); color: var(--bg); }
+.step-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; color: var(--text); margin-bottom: 10px; }
+.step-desc { font-size: 12px; font-weight: 300; line-height: 1.7; color: var(--text-muted); }
+
+/* ── TESTIMONIALS ── */
+.testimonials { padding: 120px 48px; background: var(--bg2); transition: background 0.3s; }
+.testimonials-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; margin-top: 64px; }
+.testimonial-card { background: var(--bg3); border: 1px solid var(--border); padding: 40px; transition: border-color .3s, background 0.3s; }
+.testimonial-card:hover { border-color: var(--border-gold); }
+.testimonial-quote { font-family: 'Cormorant Garamond', serif; font-size: 64px; color: var(--gold); line-height: .5; margin-bottom: 24px; opacity: .4; }
+.testimonial-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; font-style: italic; line-height: 1.7; color: var(--text); margin-bottom: 32px; }
+.testimonial-author { display: flex; align-items: center; gap: 16px; padding-top: 24px; border-top: 1px solid var(--border); }
+.author-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--gold); }
+.author-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.author-info { font-size: 11px; font-weight: 300; color: var(--text-muted); margin-top: 2px; }
+.star-row { display: flex; gap: 3px; margin-bottom: 20px; }
+.star { color: var(--gold); font-size: 12px; }
+
+/* ── CONTACT ── */
+.contact { padding: 120px 48px; background: var(--bg); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; transition: background 0.3s; }
+.contact-detail { display: flex; align-items: flex-start; gap: 20px; margin-top: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+.contact-detail:last-of-type { border-bottom: none; }
+.contact-detail-icon { color: var(--gold); margin-top: 3px; flex-shrink: 0; }
+.contact-detail-label { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+.contact-detail-value { font-size: 15px; font-weight: 300; color: var(--text); }
+.contact-detail-value a { color: var(--text); text-decoration: none; transition: color .3s; }
+.contact-detail-value a:hover { color: var(--gold); }
+.contact-form { display: flex; flex-direction: column; gap: 20px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-label { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); }
+.form-input, .form-select, .form-textarea { background: var(--form-bg); border: 1px solid var(--border); color: var(--text); font-family: 'Montserrat', sans-serif; font-size: 13px; font-weight: 300; padding: 14px 16px; outline: none; transition: border-color .3s, background 0.3s, color 0.3s; width: 100%; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+.form-select { appearance: none; cursor: pointer; }
+.form-textarea { height: 120px; resize: vertical; }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); }
+.form-submit { background: var(--gold); color: #0D0D0D; border: none; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; padding: 18px 36px; cursor: pointer; transition: all .3s; align-self: flex-start; }
+.form-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+/* ── FOOTER ── */
+footer { background: var(--footer-bg); border-top: 1px solid var(--border); padding: 64px 48px 32px; transition: background 0.3s; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); }
+.footer-tagline { font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--text-muted); max-width: 280px; margin-top: 20px; }
+.footer-col-title { font-size: 10px; font-weight: 600; letter-spacing: .25em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.footer-links a { font-size: 13px; font-weight: 300; color: var(--text-muted); text-decoration: none; transition: color .3s; cursor: pointer; }
+.footer-links a:hover { color: var(--gold); }
+.footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 28px; }
+.footer-copy { font-size: 12px; font-weight: 300; color: var(--text-dim); }
+.footer-copy span { color: var(--gold); }
+
+/* ── WHATSAPP FLOAT ── */
+.whatsapp-float { position: fixed; bottom: 32px; right: 32px; z-index: 998; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.whatsapp-label { background: var(--bg2); border: 1px solid var(--border-gold); color: var(--gold); font-size: 11px; font-weight: 500; letter-spacing: .1em; padding: 8px 16px; white-space: nowrap; opacity: 0; transform: translateX(10px); transition: all .3s; pointer-events: none; }
+.whatsapp-float:hover .whatsapp-label { opacity: 1; transform: translateX(0); }
+.whatsapp-btn { width: 56px; height: 56px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 8px 32px #25D36640; transition: all .3s; animation: pulse-wa 3s infinite; }
+.whatsapp-btn:hover { transform: scale(1.1); }
+
+/* ── SPECIALTY PAGES ── */
+.main-site { display: block; }
+.main-site.hidden { display: none; }
+.specialty-page { display: none; min-height: 100vh; background: var(--bg); padding-top: 120px; transition: background 0.3s; }
+.specialty-page.active { display: block; }
+.specialty-hero { padding: 80px 48px 64px; background: var(--bg2); border-bottom: 1px solid var(--border); position: relative; overflow: hidden; transition: background 0.3s; }
+.specialty-hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 80% 50%, var(--gold-pale) 0%, transparent 60%); }
+.back-btn { display: inline-flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: 11px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; cursor: pointer; margin-bottom: 40px; transition: color .3s; background: none; border: none; font-family: 'Montserrat', sans-serif; }
+.back-btn:hover { color: var(--gold); }
+.specialty-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 6vw, 80px); font-weight: 300; color: var(--text); line-height: 1.05; position: relative; z-index: 1; }
+.specialty-title em { font-style: italic; color: var(--gold-light); }
+.specialty-subtitle { font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--text-muted); max-width: 600px; margin-top: 20px; position: relative; z-index: 1; }
+.specialty-procedures-section { padding: 80px 48px; background: var(--bg); transition: background 0.3s; }
+.procedures-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 48px; }
+.procedure-card { background: var(--bg2); padding: 36px 32px; border-bottom: 2px solid transparent; transition: all .3s; }
+.procedure-card:hover { background: var(--bg3); border-bottom-color: var(--gold); }
+.procedure-card-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--text); margin-bottom: 12px; }
+.procedure-card-desc { font-size: 13px; font-weight: 300; line-height: 1.7; color: var(--text-muted); margin-bottom: 20px; }
+.procedure-meta { display: flex; gap: 20px; }
+.procedure-meta-label { font-size: 9px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 4px; }
+.procedure-meta-value { font-size: 12px; font-weight: 400; color: var(--gold); }
+.doctors-section { padding: 80px 48px; background: var(--bg2); border-top: 1px solid var(--border); transition: background 0.3s; }
+.doctors-coming-soon { margin-top: 48px; border: 1px dashed var(--border-gold); padding: 80px 40px; text-align: center; background: var(--bg3); transition: background 0.3s; }
+.doctors-coming-soon-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--text); margin-bottom: 16px; margin-top: 24px; }
+.doctors-coming-soon-text { font-size: 14px; font-weight: 300; color: var(--text-muted); max-width: 440px; margin: 0 auto 32px; line-height: 1.7; }
+.specialty-cta { padding: 80px 48px; background: var(--bg); text-align: center; border-top: 1px solid var(--border); transition: background 0.3s; }
+.specialty-cta h3 { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: var(--text); margin-bottom: 16px; }
+.specialty-cta p { font-size: 15px; font-weight: 300; color: var(--text-muted); margin-bottom: 36px; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeLeft { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes pulse-wa { 0%,100% { box-shadow: 0 8px 32px #25D36640; } 50% { box-shadow: 0 8px 48px #25D36670; } }
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RTL ── */
+body.lang-ar { direction: rtl; }
+body.lang-ar .hero-stats { right: auto; left: 48px; }
+body.lang-ar .stat { text-align: left; border-right: none; border-left: 1px solid var(--border-gold); padding-right: 0; padding-left: 24px; }
+
+/* ── TRANSLATIONS ── */
+[data-lang] { display: none; }
+.lang-en [data-lang="en"], .lang-ar [data-lang="ar"], .lang-tr [data-lang="tr"] { display: block; }
+span[data-lang] { display: none; }
+.lang-en span[data-lang="en"], .lang-ar span[data-lang="ar"], .lang-tr span[data-lang="tr"] { display: inline; }
+</style>
+</head>
+<body class="lang-en">
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <div class="theme-toggle">
+    <button class="theme-toggle-btn" onclick="cycleTheme()" id="themeBtn">
+      <span class="theme-icon" id="themeIcon">☀</span>
+      <span id="themeLabel">Light</span>
+    </button>
+  </div>
+  <button class="lang-btn active" onclick="setLang('en')">EN</button>
+  <span class="lang-divider">|</span>
+  <button class="lang-btn" onclick="setLang('ar')">AR</button>
+  <span class="lang-divider">|</span>
+  <button class="lang-btn" onclick="setLang('tr')">TR</button>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo" onclick="showMain()">
+    <svg width="160" height="48" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="38" font-family="Cormorant Garamond,serif" font-size="32" font-weight="300" fill="#C9A84C" letter-spacing="6">CHOICE</text>
+      <text x="10" y="62" font-family="Montserrat,sans-serif" font-size="13" font-weight="500" fill="#9A9080" letter-spacing="12">CLINIC</text>
+      <line x1="10" y1="68" x2="180" y2="68" stroke="#C9A84C" stroke-width="0.5"/>
+    </svg>
+  </div>
+  <ul class="nav-links">
+    <li><a onclick="showMain();navScroll('services')"><span data-lang="en">Services</span><span data-lang="ar">الخدمات</span><span data-lang="tr">Hizmetler</span></a></li>
+    <li><a onclick="showMain();navScroll('why')"><span data-lang="en">Why Istanbul</span><span data-lang="ar">لماذا إسطنبول</span><span data-lang="tr">Neden İstanbul</span></a></li>
+    <li><a onclick="showMain();navScroll('process')"><span data-lang="en">How It Works</span><span data-lang="ar">كيف يعمل</span><span data-lang="tr">Nasıl Çalışır</span></a></li>
+    <li><a onclick="showMain();navScroll('contact')"><span data-lang="en">Contact</span><span data-lang="ar">تواصل</span><span data-lang="tr">İletişim</span></a></li>
+    <li><a onclick="showMain();navScroll('contact')" class="nav-cta"><span data-lang="en">Free Consultation</span><span data-lang="ar">استشارة مجانية</span><span data-lang="tr">Ücretsiz Danışma</span></a></li>
+  </ul>
+</nav>
+
+<!-- ═══════ MAIN SITE ═══════ -->
+<div class="main-site" id="mainSite">
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div><div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow"><div class="hero-eyebrow-line"></div>
+        <span data-lang="en">Istanbul's Premier Medical Tourism</span>
+        <span data-lang="ar">السياحة الطبية المتميزة في إسطنبول</span>
+        <span data-lang="tr">İstanbul'un Önde Gelen Medikal Turizmi</span>
+      </div>
+      <h1>
+        <span data-lang="en">World-Class Care,<br><em>Your Way.</em></span>
+        <span data-lang="ar">رعاية طبية عالمية،<br><em>بطريقتك.</em></span>
+        <span data-lang="tr">Dünya Standartlarında<br><em>Bakım, Sizin Tarzınızda.</em></span>
+      </h1>
+      <p class="hero-desc">
+        <span data-lang="en">We connect patients from the UK and USA with Istanbul's finest dental, hair restoration, and plastic surgery specialists — handling everything from first inquiry to safe return home.</span>
+        <span data-lang="ar">نربط المرضى من المملكة المتحدة والولايات المتحدة بأفضل متخصصي طب الأسنان وزراعة الشعر والجراحة التجميلية في إسطنبول.</span>
+        <span data-lang="tr">İngiltere ve ABD'den hastaları İstanbul'un en iyi diş, saç ekimi ve plastik cerrahi uzmanlarıyla buluşturuyoruz.</span>
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showMain();navScroll('contact')">
+          <span data-lang="en">Get Free Consultation</span><span data-lang="ar">احصل على استشارة مجانية</span><span data-lang="tr">Ücretsiz Danışma Al</span>
+        </button>
+        <button class="btn-secondary" onclick="showMain();navScroll('services')">
+          <span data-lang="en">Our Services</span><span data-lang="ar">خدماتنا</span><span data-lang="tr">Hizmetlerimiz</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">UK</div>
+        <div class="stat-label"><span data-lang="en">& US Patients</span><span data-lang="ar">& المرضى الأمريكيين</span><span data-lang="tr">& ABD Hastaları</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">3</div>
+        <div class="stat-label"><span data-lang="en">Specialities</span><span data-lang="ar">تخصصات</span><span data-lang="tr">Uzmanlık Alanı</span></div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">24/7</div>
+        <div class="stat-label"><span data-lang="en">Patient Support</span><span data-lang="ar">دعم المرضى</span><span data-lang="tr">Hasta Desteği</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-section">
+    <div class="marquee-track">
+      <div class="marquee-item"><span>Dental Implants</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>All-on-4 & All-on-6</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Hollywood Smile</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Hair Transplant</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Rhinoplasty</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Breast Augmentation</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Liposuction</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>FUE & DHI Transplant</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Dental Implants</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>All-on-4 & All-on-6</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Hollywood Smile</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Hair Transplant</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Rhinoplasty</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Breast Augmentation</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>Liposuction</span><span class="marquee-dot"></span></div>
+      <div class="marquee-item"><span>FUE & DHI Transplant</span><span class="marquee-dot"></span></div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-header reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">What We Offer</span><span data-lang="ar">ما نقدمه</span><span data-lang="tr">Ne Sunuyoruz</span></div>
+      <h2 class="section-title"><span data-lang="en">Our Medical <em>Specialities</em></span><span data-lang="ar">تخصصاتنا <em>الطبية</em></span><span data-lang="tr">Tıbbi <em>Uzmanlıklarımız</em></span></h2>
+    </div>
+    <div class="services-grid reveal">
+      <div class="service-card" onclick="showSpecialty('dental')">
+        <div class="service-num">01</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M24 6c-4 0-8 2-10 6-2 3-2 7 0 10l2 12c0 2 1 4 4 4s4-3 4-5 1-5 4-5 4 3 4 5 1 5 4 5 4-2 4-4l2-12c2-3 2-7 0-10-2-4-6-6-10-6z"/></svg>
+        <div class="service-name"><span data-lang="en">Dental Excellence</span><span data-lang="ar">تميز طب الأسنان</span><span data-lang="tr">Diş Mükemmelliği</span></div>
+        <p class="service-desc"><span data-lang="en">From full arch restorations to the perfect Hollywood Smile, our partner clinics use only premium European implant brands.</span><span data-lang="ar">من ترميم القوس الكامل إلى ابتسامة هوليوود المثالية، تستخدم عياداتنا ماركات زرعات أوروبية فاخرة فقط.</span><span data-lang="tr">Tam ark restorasyonundan Hollywood Gülüşüne kadar, yalnızca premium Avrupa implant markaları.</span></p>
+        <div class="service-procedures"><span class="procedure-tag">All-on-4</span><span class="procedure-tag">All-on-6</span><span class="procedure-tag">Veneers</span><span class="procedure-tag">Implants</span><span class="procedure-tag">Hollywood Smile</span></div>
+        <div class="service-link"><span data-lang="en">Explore Dental</span><span data-lang="ar">استكشاف الأسنان</span><span data-lang="tr">Diş Tedavileri</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="service-card" onclick="showSpecialty('hair')">
+        <div class="service-num">02</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 40c0-8 4-14 12-16M36 40c0-8-4-14-12-16M24 24c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"/></svg>
+        <div class="service-name"><span data-lang="en">Hair Restoration</span><span data-lang="ar">زراعة الشعر</span><span data-lang="tr">Saç Restorasyonu</span></div>
+        <p class="service-desc"><span data-lang="en">Natural, permanent results using the latest FUE and DHI techniques. Istanbul is the world capital of hair transplantation.</span><span data-lang="ar">نتائج طبيعية ودائمة باستخدام أحدث تقنيات FUE وDHI. إسطنبول العاصمة العالمية لزراعة الشعر.</span><span data-lang="tr">En son FUE ve DHI teknikleri kullanılarak doğal, kalıcı sonuçlar.</span></p>
+        <div class="service-procedures"><span class="procedure-tag">FUE</span><span class="procedure-tag">DHI</span><span class="procedure-tag">Beard Transplant</span><span class="procedure-tag">Eyebrow</span></div>
+        <div class="service-link"><span data-lang="en">Explore Hair</span><span data-lang="ar">استكشاف الشعر</span><span data-lang="tr">Saç Tedavileri</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+      <div class="service-card" onclick="showSpecialty('plastic')">
+        <div class="service-num">03</div>
+        <svg class="service-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="24" cy="16" r="8"/><path d="M8 40c0-10 7-16 16-16s16 6 16 16"/></svg>
+        <div class="service-name"><span data-lang="en">Plastic Surgery</span><span data-lang="ar">الجراحة التجميلية</span><span data-lang="tr">Plastik Cerrahi</span></div>
+        <p class="service-desc"><span data-lang="en">Board-certified surgeons delivering life-changing aesthetic results in world-class facilities.</span><span data-lang="ar">جراحون معتمدون يقدمون نتائج جمالية تغير الحياة في منشآت عالمية المستوى.</span><span data-lang="tr">Dünya standartlarındaki tesislerde yaşam değiştiren estetik sonuçlar.</span></p>
+        <div class="service-procedures"><span class="procedure-tag">Rhinoplasty</span><span class="procedure-tag">Breast Aug.</span><span class="procedure-tag">Liposuction</span><span class="procedure-tag">Tummy Tuck</span></div>
+        <div class="service-link"><span data-lang="en">Explore Surgery</span><span data-lang="ar">استكشاف الجراحة</span><span data-lang="tr">Cerrahi Tedaviler</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY ISTANBUL -->
+  <section class="why" id="why">
+    <div class="why-visual reveal">
+      <div class="why-img-frame">
+        <div class="why-img-placeholder"><span data-lang="en">Istanbul Photo</span><span data-lang="ar">صورة إسطنبول</span><span data-lang="tr">İstanbul Fotoğrafı</span></div>
+      </div>
+      <div class="why-badge">
+        <span class="why-badge-num">World-Class</span>
+        <span class="why-badge-text">Medical Standards in Istanbul</span>
+      </div>
+    </div>
+    <div class="why-content reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Why Choose Istanbul</span><span data-lang="ar">لماذا تختار إسطنبول</span><span data-lang="tr">Neden İstanbul</span></div>
+      <h2 class="section-title"><span data-lang="en">The Smart Choice for <em>Global Patients</em></span><span data-lang="ar">الاختيار الذكي للمرضى <em>العالميين</em></span><span data-lang="tr">Global Hastalar İçin <em>Akıllı Seçim</em></span></h2>
+      <div class="why-points">
+        <div class="why-point">
+          <div class="why-point-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div>
+            <div class="why-point-title"><span data-lang="en">World-Class Standards</span><span data-lang="ar">معايير عالمية</span><span data-lang="tr">Dünya Standartları</span></div>
+            <p class="why-point-text"><span data-lang="en">JCI-accredited facilities with internationally trained surgeons and cutting-edge technology.</span><span data-lang="ar">منشآت معتمدة من JCI مع جراحين مدربين دولياً وتكنولوجيا متطورة.</span><span data-lang="tr">Uluslararası eğitimli cerrahlar ve son teknoloji ile JCI akreditasyonlu tesisler.</span></p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-point-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <div>
+            <div class="why-point-title"><span data-lang="en">Significant Cost Savings</span><span data-lang="ar">توفير كبير في التكاليف</span><span data-lang="tr">Önemli Maliyet Tasarrufu</span></div>
+            <p class="why-point-text"><span data-lang="en">Same quality procedures at a fraction of UK and US costs, without compromising on care.</span><span data-lang="ar">نفس الإجراءات بجودة عالية بجزء من تكاليف المملكة المتحدة والولايات المتحدة.</span><span data-lang="tr">İngiltere ve ABD maliyetlerinin çok altında aynı kaliteli prosedürler.</span></p>
+          </div>
+        </div>
+        <div class="why-point">
+          <div class="why-point-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div>
+          <div>
+            <div class="why-point-title"><span data-lang="en">Dedicated English Support</span><span data-lang="ar">دعم مخصص بالإنجليزية</span><span data-lang="tr">Özel İngilizce Destek</span></div>
+            <p class="why-point-text"><span data-lang="en">Your personal coordinator handles everything — from airport arrival to post-treatment follow-up.</span><span data-lang="ar">يتولى منسقك الشخصي كل شيء من وصولك للمطار حتى المتابعة بعد العلاج.</span><span data-lang="tr">Kişisel koordinatörünüz havalimanından taburculuğa kadar her şeyi halleder.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="process" id="process">
+    <div class="section-header reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Simple Process</span><span data-lang="ar">عملية بسيطة</span><span data-lang="tr">Basit Süreç</span></div>
+      <h2 class="section-title"><span data-lang="en">Your Journey, <em>Step by Step</em></span><span data-lang="ar">رحلتك، <em>خطوة بخطوة</em></span><span data-lang="tr">Yolculuğunuz, <em>Adım Adım</em></span></h2>
+    </div>
+    <div class="process-steps reveal">
+      <div class="process-step"><div class="step-num">01</div><div class="step-title"><span data-lang="en">Free Consultation</span><span data-lang="ar">استشارة مجانية</span><span data-lang="tr">Ücretsiz Danışma</span></div><p class="step-desc"><span data-lang="en">Tell us what you need. We assess your case and match you with the right specialist.</span><span data-lang="ar">أخبرنا بما تحتاجه. نقيّم حالتك ونربطك بالمختص المناسب.</span><span data-lang="tr">İhtiyacınızı söyleyin. Durumunuzu değerlendirir ve doğru uzmanla eşleştiririz.</span></p></div>
+      <div class="process-step"><div class="step-num">02</div><div class="step-title"><span data-lang="en">Custom Plan</span><span data-lang="ar">خطة مخصصة</span><span data-lang="tr">Özel Plan</span></div><p class="step-desc"><span data-lang="en">Receive a personalised treatment plan with transparent details — no surprises.</span><span data-lang="ar">احصل على خطة علاج مخصصة بتفاصيل شفافة دون مفاجآت.</span><span data-lang="tr">Şeffaf detaylarla kişiselleştirilmiş bir tedavi planı alın.</span></p></div>
+      <div class="process-step"><div class="step-num">03</div><div class="step-title"><span data-lang="en">We Arrange All</span><span data-lang="ar">نرتب كل شيء</span><span data-lang="tr">Her Şeyi Ayarlarız</span></div><p class="step-desc"><span data-lang="en">Flights, hotel, airport transfer, clinic appointments — all organised for you.</span><span data-lang="ar">الرحلات والفندق والنقل ومواعيد العيادة، كل شيء منظم لك.</span><span data-lang="tr">Uçuşlar, otel, transfer, randevular — hepsi sizin için organize edilir.</span></p></div>
+      <div class="process-step"><div class="step-num">04</div><div class="step-title"><span data-lang="en">Treatment</span><span data-lang="ar">العلاج</span><span data-lang="tr">Tedavi</span></div><p class="step-desc"><span data-lang="en">Your procedure is carried out by expert specialists in a premium Istanbul facility.</span><span data-lang="ar">تُجرى العملية على يد متخصصين خبراء في منشأة متميزة في إسطنبول.</span><span data-lang="tr">İşleminiz İstanbul'daki premium bir tesiste uzman doktorlar tarafından gerçekleştirilir.</span></p></div>
+      <div class="process-step"><div class="step-num">05</div><div class="step-title"><span data-lang="en">Aftercare</span><span data-lang="ar">الرعاية اللاحقة</span><span data-lang="tr">Sonrası Bakım</span></div><p class="step-desc"><span data-lang="en">30-day follow-up support after you return home. We're with you every step.</span><span data-lang="ar">دعم متابعة لمدة 30 يومًا بعد عودتك. نحن معك في كل خطوة.</span><span data-lang="tr">Eve döndükten sonra 30 günlük takip desteği.</span></p></div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="section-header reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Patient Stories</span><span data-lang="ar">قصص المرضى</span><span data-lang="tr">Hasta Hikayeleri</span></div>
+      <h2 class="section-title"><span data-lang="en">Real People, <em>Real Results</em></span><span data-lang="ar">أشخاص حقيقيون، <em>نتائج حقيقية</em></span><span data-lang="tr">Gerçek İnsanlar, <em>Gerçek Sonuçlar</em></span></h2>
+    </div>
+    <div class="testimonials-grid reveal">
+      <div class="testimonial-card"><div class="star-row"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><div class="testimonial-quote">"</div><p class="testimonial-text">The entire experience exceeded every expectation. From the moment I landed in Istanbul to my follow-up calls back home, the team at Choice Clinic was exceptional.</p><div class="testimonial-author"><div class="author-avatar">S</div><div><div class="author-name">Sarah M.</div><div class="author-info">All-on-6 Implants · London, UK</div></div></div></div>
+      <div class="testimonial-card"><div class="star-row"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><div class="testimonial-quote">"</div><p class="testimonial-text">I was nervous about travelling abroad for surgery. Choice Clinic made every step crystal clear. My rhinoplasty results are beyond what I dreamed possible.</p><div class="testimonial-author"><div class="author-avatar">J</div><div><div class="author-name">James T.</div><div class="author-info">Rhinoplasty · New York, USA</div></div></div></div>
+      <div class="testimonial-card"><div class="star-row"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><div class="testimonial-quote">"</div><p class="testimonial-text">Hair transplant in Istanbul was the best decision I ever made. Choice Clinic handled absolutely everything. I just showed up and was taken care of completely.</p><div class="testimonial-author"><div class="author-avatar">M</div><div><div class="author-name">Michael R.</div><div class="author-info">FUE Hair Transplant · Manchester, UK</div></div></div></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="contact-info reveal">
+      <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Get In Touch</span><span data-lang="ar">تواصل معنا</span><span data-lang="tr">İletişime Geçin</span></div>
+      <h2 class="section-title"><span data-lang="en">Start Your <em>Journey Today</em></span><span data-lang="ar">ابدأ <em>رحلتك اليوم</em></span><span data-lang="tr">Yolculuğunuza <em>Bugün Başlayın</em></span></h2>
+      <div class="contact-detail"><div class="contact-detail-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><div class="contact-detail-label">Email</div><div class="contact-detail-value"><a href="mailto:info@choiceclinic.net">info@choiceclinic.net</a></div></div></div>
+      <div class="contact-detail"><div class="contact-detail-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="contact-detail-label"><span data-lang="en">Location</span><span data-lang="ar">الموقع</span><span data-lang="tr">Konum</span></div><div class="contact-detail-value">Istanbul, Turkey</div></div></div>
+      <div class="contact-detail"><div class="contact-detail-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><div><div class="contact-detail-label">WhatsApp</div><div class="contact-detail-value"><a href="https://wa.me/905000000000">+90 500 000 00 00</a></div></div></div>
+    </div>
+    <div class="reveal">
+      <form class="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label"><span data-lang="en">First Name</span><span data-lang="ar">الاسم الأول</span><span data-lang="tr">Ad</span></label><input type="text" class="form-input" placeholder="John"></div>
+          <div class="form-group"><label class="form-label"><span data-lang="en">Last Name</span><span data-lang="ar">اسم العائلة</span><span data-lang="tr">Soyad</span></label><input type="text" class="form-input" placeholder="Smith"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" placeholder="john@email.com"></div>
+        <div class="form-group">
+          <label class="form-label"><span data-lang="en">Interested In</span><span data-lang="ar">مهتم بـ</span><span data-lang="tr">İlgilendiğiniz</span></label>
+          <select class="form-select form-input">
+            <option value="" disabled selected>Select a procedure...</option>
+            <option>All-on-4 / All-on-6 Implants</option>
+            <option>Hollywood Smile / Veneers</option>
+            <option>Dental Implants</option>
+            <option>FUE Hair Transplant</option>
+            <option>DHI Hair Transplant</option>
+            <option>Rhinoplasty</option>
+            <option>Breast Augmentation</option>
+            <option>Liposuction / 360 Lipo</option>
+            <option>Tummy Tuck</option>
+            <option>Multiple Procedures</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label"><span data-lang="en">Message</span><span data-lang="ar">الرسالة</span><span data-lang="tr">Mesaj</span></label><textarea class="form-textarea" placeholder="Tell us about your situation..."></textarea></div>
+        <button type="submit" class="form-submit"><span data-lang="en">Send Message</span><span data-lang="ar">إرسال الرسالة</span><span data-lang="tr">Mesaj Gönder</span></button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <svg width="140" height="40" viewBox="0 0 280 60" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="30" font-family="Cormorant Garamond,serif" font-size="28" font-weight="300" fill="#C9A84C" letter-spacing="5">CHOICE</text>
+          <text x="0" y="50" font-family="Montserrat,sans-serif" font-size="11" font-weight="500" fill="#9A9080" letter-spacing="10">CLINIC</text>
+        </svg>
+        <p class="footer-tagline">World-class medical care in Istanbul, coordinated entirely in English for UK and US patients.</p>
+      </div>
+      <div><div class="footer-col-title">Services</div><ul class="footer-links"><li><a onclick="showSpecialty('dental')">Dental Treatments</a></li><li><a onclick="showSpecialty('hair')">Hair Transplant</a></li><li><a onclick="showSpecialty('plastic')">Plastic Surgery</a></li></ul></div>
+      <div><div class="footer-col-title">Company</div><ul class="footer-links"><li><a>About Us</a></li><li><a>Our Doctors</a></li><li><a onclick="showMain();navScroll('process')">How It Works</a></li></ul></div>
+      <div><div class="footer-col-title">Contact</div><ul class="footer-links"><li><a href="mailto:info@choiceclinic.net">info@choiceclinic.net</a></li><li><a href="https://wa.me/905000000000">WhatsApp Us</a></li><li><a>Istanbul, Turkey</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 <span>Choice Clinic</span>. All rights reserved.</div>
+      <div class="footer-copy">Istanbul, Turkey · <span>info@choiceclinic.net</span></div>
+    </div>
+  </footer>
+</div><!-- /main-site -->
+
+<!-- ═══════ DENTAL PAGE ═══════ -->
+<div class="specialty-page" id="page-dental">
+  <div class="specialty-hero">
+    <button class="back-btn" onclick="showMain()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span data-lang="en">Back to Home</span><span data-lang="ar">العودة للرئيسية</span><span data-lang="tr">Ana Sayfaya Dön</span></button>
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Dental Excellence</span><span data-lang="ar">تميز طب الأسنان</span><span data-lang="tr">Diş Mükemmelliği</span></div>
+    <h1 class="specialty-title"><span data-lang="en">Dental <em>Treatments</em></span><span data-lang="ar">علاجات <em>الأسنان</em></span><span data-lang="tr">Diş <em>Tedavileri</em></span></h1>
+    <p class="specialty-subtitle"><span data-lang="en">Istanbul is one of the world's leading destinations for dental work. Our partner clinics use only internationally recognised implant brands, overseen by highly experienced prosthodontists and oral surgeons.</span><span data-lang="ar">إسطنبول واحدة من الوجهات الرائدة عالمياً لطب الأسنان. تستخدم عياداتنا الشريكة ماركات زرعات معترفاً بها دولياً.</span><span data-lang="tr">İstanbul, diş işlemleri için dünyanın önde gelen destinasyonlarından biridir.</span></p>
+  </div>
+  <div class="specialty-procedures-section">
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Procedures</span><span data-lang="ar">الإجراءات</span><span data-lang="tr">Prosedürler</span></div>
+    <h2 class="section-title"><span data-lang="en">What We <em>Offer</em></span><span data-lang="ar">ما <em>نقدمه</em></span><span data-lang="tr">Ne <em>Sunuyoruz</em></span></h2>
+    <div class="procedures-grid">
+      <div class="procedure-card"><div class="procedure-card-name">All-on-4 Implants</div><p class="procedure-card-desc">Full arch restoration with just 4 implants. A life-changing solution for patients with multiple missing teeth or those looking to replace full dentures permanently.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">Minimal</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">All-on-6 Implants</div><p class="procedure-card-desc">Enhanced arch restoration using 6 implants for superior stability. Ideal for patients with greater bone density requirements and those seeking maximum durability.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">Minimal</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Hollywood Smile</div><p class="procedure-card-desc">A complete smile transformation using veneers, crowns, and whitening. Customised to your facial features for a natural yet stunning result.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">Same day</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Porcelain Veneers</div><p class="procedure-card-desc">Ultra-thin porcelain shells bonded to the front of teeth to correct shape, colour, and alignment. Minimal tooth preparation required.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">Same day</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Dental Crowns & Bridges</div><p class="procedure-card-desc">High-quality zirconia and porcelain crowns to restore damaged or discoloured teeth to full function and appearance.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">Same day</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Teeth Whitening</div><p class="procedure-card-desc">Professional laser whitening for dramatically brighter teeth in a single session. Often combined with other cosmetic dental work for complete results.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">1–2 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">Same day</div></div></div></div>
+    </div>
+  </div>
+  <div class="doctors-section">
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Our Specialists</span><span data-lang="ar">متخصصونا</span><span data-lang="tr">Uzmanlarımız</span></div>
+    <h2 class="section-title"><span data-lang="en">Meet Our <em>Dental Doctors</em></span><span data-lang="ar">تعرف على <em>أطبائنا</em></span><span data-lang="tr">Diş <em>Doktorlarımız</em></span></h2>
+    <div class="doctors-coming-soon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1" opacity="0.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <div class="doctors-coming-soon-title"><span data-lang="en">Doctors Coming Soon</span><span data-lang="ar">الأطباء قريباً</span><span data-lang="tr">Doktorlar Yakında</span></div>
+      <p class="doctors-coming-soon-text"><span data-lang="en">We are finalising partnerships with Istanbul's leading dental specialists. Doctor profiles will be published here shortly.</span><span data-lang="ar">نحن نُنهي الشراكات مع كبار متخصصي طب الأسنان في إسطنبول. سيتم نشر ملفات الأطباء هنا قريباً.</span><span data-lang="tr">İstanbul'un önde gelen diş uzmanlarıyla ortaklıklarımızı tamamlıyoruz.</span></p>
+      <button class="btn-primary" onclick="showMain();navScroll('contact')"><span data-lang="en">Contact Us in the Meantime</span><span data-lang="ar">تواصل معنا في هذه الأثناء</span><span data-lang="tr">Bu Süreçte Bize Ulaşın</span></button>
+    </div>
+  </div>
+  <div class="specialty-cta">
+    <h3><span data-lang="en">Ready to Transform Your Smile?</span><span data-lang="ar">هل أنت مستعد لتغيير ابتسامتك؟</span><span data-lang="tr">Gülüşünüzü Dönüştürmeye Hazır mısınız?</span></h3>
+    <p><span data-lang="en">Get a free consultation and personalised treatment plan from our team.</span><span data-lang="ar">احصل على استشارة مجانية وخطة علاج مخصصة.</span><span data-lang="tr">Ücretsiz danışma ve kişiselleştirilmiş tedavi planı alın.</span></p>
+    <button class="btn-primary" onclick="showMain();navScroll('contact')"><span data-lang="en">Get Free Consultation</span><span data-lang="ar">احصل على استشارة مجانية</span><span data-lang="tr">Ücretsiz Danışma Al</span></button>
+  </div>
+</div>
+
+<!-- ═══════ HAIR PAGE ═══════ -->
+<div class="specialty-page" id="page-hair">
+  <div class="specialty-hero">
+    <button class="back-btn" onclick="showMain()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span data-lang="en">Back to Home</span><span data-lang="ar">العودة للرئيسية</span><span data-lang="tr">Ana Sayfaya Dön</span></button>
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Hair Restoration</span><span data-lang="ar">زراعة الشعر</span><span data-lang="tr">Saç Restorasyonu</span></div>
+    <h1 class="specialty-title"><span data-lang="en">Hair <em>Transplant</em></span><span data-lang="ar">زراعة <em>الشعر</em></span><span data-lang="tr">Saç <em>Ekimi</em></span></h1>
+    <p class="specialty-subtitle"><span data-lang="en">Istanbul performs more hair transplants than anywhere else in the world. Our partner clinics combine the highest technical standards with highly experienced surgeons to deliver natural, permanent results.</span><span data-lang="ar">تُجري إسطنبول عمليات زرع شعر أكثر من أي مكان آخر في العالم.</span><span data-lang="tr">İstanbul, dünyada en fazla saç ekimi gerçekleştirilen şehirdir.</span></p>
+  </div>
+  <div class="specialty-procedures-section">
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Procedures</span><span data-lang="ar">الإجراءات</span><span data-lang="tr">Prosedürler</span></div>
+    <h2 class="section-title"><span data-lang="en">What We <em>Offer</em></span><span data-lang="ar">ما <em>نقدمه</em></span><span data-lang="tr">Ne <em>Sunuyoruz</em></span></h2>
+    <div class="procedures-grid">
+      <div class="procedure-card"><div class="procedure-card-name">FUE Hair Transplant</div><p class="procedure-card-desc">Follicular Unit Extraction — individual follicles harvested and implanted for natural-looking density. The gold standard in hair restoration globally.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">7–10 days</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">DHI Hair Transplant</div><p class="procedure-card-desc">Direct Hair Implantation — more precise placement using a Choi pen for denser, more natural results with faster healing and minimal scarring.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">5–7 days</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Beard Transplant</div><p class="procedure-card-desc">Restore or enhance beard density using DHI technique. Ideal for patchy beards, scarring, or those looking to create a fuller, more defined beard line.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">3–5 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">5–7 days</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Eyebrow Transplant</div><p class="procedure-card-desc">Restore thin or absent eyebrows with precisely placed grafts that mimic natural eyebrow growth direction and pattern.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">2–3 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">5–7 days</div></div></div></div>
+    </div>
+  </div>
+  <div class="doctors-section">
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Our Specialists</span><span data-lang="ar">متخصصونا</span><span data-lang="tr">Uzmanlarımız</span></div>
+    <h2 class="section-title"><span data-lang="en">Meet Our <em>Hair Specialists</em></span><span data-lang="ar">تعرف على <em>متخصصي الشعر</em></span><span data-lang="tr">Saç <em>Uzmanlarımız</em></span></h2>
+    <div class="doctors-coming-soon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1" opacity="0.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <div class="doctors-coming-soon-title"><span data-lang="en">Doctors Coming Soon</span><span data-lang="ar">الأطباء قريباً</span><span data-lang="tr">Doktorlar Yakında</span></div>
+      <p class="doctors-coming-soon-text"><span data-lang="en">We are finalising partnerships with Istanbul's leading hair restoration specialists. Doctor profiles will be published here shortly.</span><span data-lang="ar">نحن نُنهي الشراكات مع كبار متخصصي زراعة الشعر في إسطنبول.</span><span data-lang="tr">İstanbul'un önde gelen saç uzmanlarıyla ortaklıklarımızı tamamlıyoruz.</span></p>
+      <button class="btn-primary" onclick="showMain();navScroll('contact')"><span data-lang="en">Contact Us in the Meantime</span><span data-lang="ar">تواصل معنا في هذه الأثناء</span><span data-lang="tr">Bu Süreçte Bize Ulaşın</span></button>
+    </div>
+  </div>
+  <div class="specialty-cta">
+    <h3><span data-lang="en">Ready to Restore Your Hair?</span><span data-lang="ar">هل أنت مستعد لاستعادة شعرك؟</span><span data-lang="tr">Saçınızı Geri Kazanmaya Hazır mısınız?</span></h3>
+    <p><span data-lang="en">Get a free consultation and personalised treatment plan from our team.</span><span data-lang="ar">احصل على استشارة مجانية وخطة علاج مخصصة.</span><span data-lang="tr">Ücretsiz danışma ve kişiselleştirilmiş tedavi planı alın.</span></p>
+    <button class="btn-primary" onclick="showMain();navScroll('contact')"><span data-lang="en">Get Free Consultation</span><span data-lang="ar">احصل على استشارة مجانية</span><span data-lang="tr">Ücretsiz Danışma Al</span></button>
+  </div>
+</div>
+
+<!-- ═══════ PLASTIC SURGERY PAGE ═══════ -->
+<div class="specialty-page" id="page-plastic">
+  <div class="specialty-hero">
+    <button class="back-btn" onclick="showMain()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5M12 5l-7 7 7 7"/></svg><span data-lang="en">Back to Home</span><span data-lang="ar">العودة للرئيسية</span><span data-lang="tr">Ana Sayfaya Dön</span></button>
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Plastic Surgery</span><span data-lang="ar">الجراحة التجميلية</span><span data-lang="tr">Plastik Cerrahi</span></div>
+    <h1 class="specialty-title"><span data-lang="en">Plastic <em>Surgery</em></span><span data-lang="ar">الجراحة <em>التجميلية</em></span><span data-lang="tr">Plastik <em>Cerrahi</em></span></h1>
+    <p class="specialty-subtitle"><span data-lang="en">Istanbul's board-certified plastic surgeons combine artistry with medical precision. Our partner facilities deliver life-changing results for international patients every day.</span><span data-lang="ar">يجمع جراحو التجميل المعتمدون في إسطنبول بين الفن والدقة الطبية.</span><span data-lang="tr">İstanbul'un sertifikalı plastik cerrahları sanatı tıbbi hassasiyetle birleştirir.</span></p>
+  </div>
+  <div class="specialty-procedures-section">
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Procedures</span><span data-lang="ar">الإجراءات</span><span data-lang="tr">Prosedürler</span></div>
+    <h2 class="section-title"><span data-lang="en">What We <em>Offer</em></span><span data-lang="ar">ما <em>نقدمه</em></span><span data-lang="tr">Ne <em>Sunuyoruz</em></span></h2>
+    <div class="procedures-grid">
+      <div class="procedure-card"><div class="procedure-card-name">Rhinoplasty</div><p class="procedure-card-desc">Nose reshaping surgery to improve aesthetic appearance or correct breathing issues. Istanbul is one of the world's most sought-after destinations for rhinoplasty.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">7–10 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">2–3 weeks</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Breast Augmentation</div><p class="procedure-card-desc">Enhance breast size, shape and symmetry using high-quality implants. Performed by board-certified surgeons with extensive aesthetic surgery experience.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">7–10 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">2–4 weeks</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Liposuction / 360 Lipo</div><p class="procedure-card-desc">Remove stubborn fat deposits from targeted areas. 360 liposuction treats the full circumference of the torso for dramatic body contouring results.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">7–10 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">2–3 weeks</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Abdominoplasty</div><p class="procedure-card-desc">Tummy tuck surgery to remove excess skin and tighten abdominal muscles. Often combined with liposuction for comprehensive body transformation.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">10–14 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">3–4 weeks</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Facelift</div><p class="procedure-card-desc">Comprehensive facial rejuvenation addressing sagging skin, deep wrinkles and loss of facial volume. Natural-looking, long-lasting results.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">10–14 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">2–3 weeks</div></div></div></div>
+      <div class="procedure-card"><div class="procedure-card-name">Blepharoplasty</div><p class="procedure-card-desc">Eyelid surgery to remove excess skin and fat from upper and lower eyelids, creating a refreshed, more youthful appearance.</p><div class="procedure-meta"><div class="procedure-meta-item"><div class="procedure-meta-label">Stay Required</div><div class="procedure-meta-value">5–7 days</div></div><div class="procedure-meta-item"><div class="procedure-meta-label">Recovery</div><div class="procedure-meta-value">1–2 weeks</div></div></div></div>
+    </div>
+  </div>
+  <div class="doctors-section">
+    <div class="section-eyebrow"><div class="section-eyebrow-line"></div><span data-lang="en">Our Specialists</span><span data-lang="ar">متخصصونا</span><span data-lang="tr">Uzmanlarımız</span></div>
+    <h2 class="section-title"><span data-lang="en">Meet Our <em>Surgeons</em></span><span data-lang="ar">تعرف على <em>جراحينا</em></span><span data-lang="tr">Cerrahlarımız</span></h2>
+    <div class="doctors-coming-soon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1" opacity="0.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <div class="doctors-coming-soon-title"><span data-lang="en">Doctors Coming Soon</span><span data-lang="ar">الأطباء قريباً</span><span data-lang="tr">Doktorlar Yakında</span></div>
+      <p class="doctors-coming-soon-text"><span data-lang="en">We are finalising partnerships with Istanbul's leading plastic surgeons. Doctor profiles will be published here shortly.</span><span data-lang="ar">نحن نُنهي الشراكات مع كبار جراحي التجميل في إسطنبول.</span><span data-lang="tr">İstanbul'un önde gelen plastik cerrahlarıyla ortaklıklarımızı tamamlıyoruz.</span></p>
+      <button class="btn-primary" onclick="showMain();navScroll('contact')"><span data-lang="en">Contact Us in the Meantime</span><span data-lang="ar">تواصل معنا في هذه الأثناء</span><span data-lang="tr">Bu Süreçte Bize Ulaşın</span></button>
+    </div>
+  </div>
+  <div class="specialty-cta">
+    <h3><span data-lang="en">Ready for Your Transformation?</span><span data-lang="ar">هل أنت مستعد لتحولك؟</span><span data-lang="tr">Dönüşümünüze Hazır mısınız?</span></h3>
+    <p><span data-lang="en">Get a free consultation and personalised treatment plan from our team.</span><span data-lang="ar">احصل على استشارة مجانية وخطة علاج مخصصة.</span><span data-lang="tr">Ücretsiz danışma ve kişiselleştirilmiş tedavi planı alın.</span></p>
+    <button class="btn-primary" onclick="showMain();navScroll('contact')"><span data-lang="en">Get Free Consultation</span><span data-lang="ar">احصل على استشارة مجانية</span><span data-lang="tr">Ücretsiz Danışma Al</span></button>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<div class="whatsapp-float">
+  <div class="whatsapp-label">Chat on WhatsApp</div>
+  <a href="https://wa.me/905000000000" target="_blank" class="whatsapp-btn">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<script>
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60));
+
+/* ── LANGUAGE ── */
+function setLang(lang) {
+  document.body.className = document.body.className.replace(/lang-\w+/,'') + ' lang-' + lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+}
+
+/* ── THEME TOGGLE ── */
+// Detect system preference
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+let currentTheme = prefersDark ? 'dark' : 'light';
+
+function applyTheme(theme) {
+  currentTheme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  const icon = document.getElementById('themeIcon');
+  const label = document.getElementById('themeLabel');
+  if (theme === 'dark') {
+    icon.textContent = '☀';
+    label.textContent = 'Light';
+  } else {
+    icon.textContent = '☾';
+    label.textContent = 'Dark';
+  }
+}
+
+function cycleTheme() {
+  applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+}
+
+// Set initial button state to match current effective theme
+applyTheme(currentTheme);
+
+// Listen for system changes (if user hasn't manually toggled)
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+  if (!document.documentElement.hasAttribute('data-theme-manual')) {
+    applyTheme(e.matches ? 'dark' : 'light');
+  }
+});
+
+/* ── SPECIALTY PAGES ── */
+function showSpecialty(name) {
+  document.getElementById('mainSite').classList.add('hidden');
+  document.querySelectorAll('.specialty-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showMain() {
+  document.getElementById('mainSite').classList.remove('hidden');
+  document.querySelectorAll('.specialty-page').forEach(p => p.classList.remove('active'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navScroll(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
+
+/* ── SCROLL REVEAL ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── FORM ── */
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  const orig = btn.innerHTML;
+  btn.textContent = '✓ Message Sent!';
+  btn.style.background = '#2a5a2a';
+  btn.style.color = '#fff';
+  setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; e.target.reset(); }, 3000);
+}
+</script>
+</body>
+</html>
