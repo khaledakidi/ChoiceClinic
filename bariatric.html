@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bariatric Surgery in Istanbul — Choice Clinic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── DESIGN TOKENS ── */
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8D08A;
+  --gold-pale: rgba(201,168,76,0.10);
+  --border-gold: rgba(201,168,76,0.30);
+  --bg: #ffffff;
+  --bg2: #f8f9fa;
+  --text: #1b1b1b;
+  --text-muted: #555555;
+  --text-dim: #888888;
+  --border: #e0e0e0;
+  --dark: #1b1b1b;
+  --dark2: #222222;
+  --dark3: #353535;
+  --shadow-card: 0 1px 5px rgba(0,0,0,0.15);
+  --radius: 5px;
+  --radius-sm: 3px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:"Titillium Web",sans-serif;font-weight:400;overflow-x:hidden;line-height:1.7;}
+
+/* ── TOP INFO BAR ── */
+.top-bar{background:var(--dark);color:#fff;font-size:13px;padding:8px 48px;display:flex;justify-content:space-between;align-items:center;}
+.top-bar a{color:var(--gold);text-decoration:none;transition:opacity .3s;}
+.top-bar a:hover{opacity:.8;}
+.top-bar-left{display:flex;align-items:center;gap:24px;}
+.top-bar-left svg{width:14px;height:14px;margin-right:6px;vertical-align:middle;color:var(--gold);}
+.top-bar-right{display:flex;align-items:center;gap:16px;}
+.lang-select{background:transparent;border:1px solid #444;color:#fff;font-family:inherit;font-size:12px;padding:3px 8px;border-radius:var(--radius-sm);cursor:pointer;}
+.lang-select option{background:var(--dark);color:#fff;}
+
+/* ── NAVIGATION ── */
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 48px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;height:70px;transition:box-shadow .3s;}
+nav.scrolled{box-shadow:0 2px 12px rgba(0,0,0,0.1);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo img{height:50px;width:auto;}
+.nav-links{display:flex;align-items:center;gap:0;list-style:none;height:100%;}
+.nav-links>li{height:100%;display:flex;align-items:center;position:relative;}
+.nav-links>li>a{color:var(--text);text-decoration:none;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding:0 16px;height:100%;display:flex;align-items:center;cursor:pointer;transition:color .3s;}
+.nav-links>li>a:hover{color:var(--gold);}
+.nav-phone{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--text);margin-right:16px;}
+.nav-phone svg{color:var(--gold);}
+.nav-cta{background:var(--gold);color:#fff !important;padding:10px 20px;border-radius:var(--radius);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em;transition:all .3s;text-decoration:none;display:inline-block;}
+.nav-cta:hover{background:var(--dark);color:#fff;}
+
+/* ── HERO ── */
+.hero{position:relative;width:100%;height:60vh;min-height:400px;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.hero-bg{position:absolute;inset:0;background:url('images/img-bariatric.webp') center/cover no-repeat;z-index:0;}
+.hero-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.55);z-index:1;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:750px;padding:0 24px;}
+.hero h1{font-size:clamp(32px,5vw,56px);font-weight:700;text-transform:uppercase;color:#fff;line-height:1.2;margin-bottom:16px;}
+.hero h1 span{color:var(--gold);}
+.hero-desc{font-size:17px;font-weight:300;color:rgba(255,255,255,0.85);line-height:1.8;margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto;}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--gold);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:600;padding:14px 32px;cursor:pointer;text-decoration:none;display:inline-block;text-transform:uppercase;letter-spacing:.05em;transition:all .3s;}
+.btn-primary:hover{background:#b8952f;transform:translateY(-2px);}
+.btn-secondary{background:transparent;color:#fff;border:2px solid rgba(255,255,255,0.5);border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:600;padding:12px 28px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.05em;transition:all .3s;}
+.btn-secondary:hover{border-color:#fff;background:rgba(255,255,255,0.1);}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{padding:16px 48px;font-size:13px;color:var(--text-muted);background:var(--bg2);border-bottom:1px solid var(--border);}
+.breadcrumb a{color:var(--gold);text-decoration:none;font-weight:600;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb span{margin:0 8px;color:var(--text-dim);}
+
+/* ── SECTION COMMON ── */
+.section-header{text-align:center;margin-bottom:48px;}
+.section-label{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:12px;position:relative;padding-bottom:8px;}
+.section-label::after{content:"";position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:40px;height:2px;background:var(--gold);}
+.section-title{font-size:clamp(28px,3.5vw,42px);font-weight:700;color:var(--text);line-height:1.2;}
+.section-title span{color:var(--gold);}
+.section-sub{font-size:15px;color:var(--text-muted);max-width:600px;margin:12px auto 0;font-weight:300;}
+
+/* ── DESCRIPTION ── */
+.description{padding:80px 48px;background:var(--bg);}
+.desc-container{max-width:900px;margin:0 auto;}
+.desc-container h2{font-size:32px;font-weight:700;color:var(--text);margin-bottom:24px;line-height:1.3;}
+.desc-container h2 span{color:var(--gold);}
+.desc-container p{font-size:16px;font-weight:300;color:var(--text-muted);line-height:1.85;margin-bottom:20px;}
+.desc-highlights{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:36px;}
+.highlight-item{display:flex;align-items:flex-start;gap:14px;padding:20px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);transition:all .3s;}
+.highlight-item:hover{border-color:var(--border-gold);box-shadow:0 4px 16px rgba(201,168,76,0.1);}
+.highlight-icon{width:44px;height:44px;flex-shrink:0;background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--gold);}
+.highlight-text h4{font-size:14px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.03em;margin-bottom:4px;}
+.highlight-text p{font-size:13px;font-weight:300;color:var(--text-muted);margin:0;line-height:1.6;}
+
+/* ── PROCEDURES ── */
+.procedures{padding:80px 48px;background:var(--bg2);}
+.procedures-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:28px;max-width:1100px;margin:0 auto;}
+.proc-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:36px;transition:all .4s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow-card);position:relative;overflow:hidden;}
+.proc-card::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gold);opacity:0;transition:opacity .3s;}
+.proc-card:hover{transform:translateY(-5px);box-shadow:0 8px 30px rgba(0,0,0,0.12);}
+.proc-card:hover::before{opacity:1;}
+.proc-icon{width:56px;height:56px;background:var(--gold-pale);border:1px solid var(--border-gold);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:20px;transition:all .3s;}
+.proc-card:hover .proc-icon{background:var(--gold);color:#fff;}
+.proc-card h3{font-size:20px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:.03em;margin-bottom:12px;}
+.proc-card p{font-size:14px;font-weight:300;line-height:1.8;color:var(--text-muted);margin-bottom:20px;}
+.proc-link{font-size:13px;font-weight:600;color:var(--gold);display:inline-flex;align-items:center;gap:6px;text-decoration:none;text-transform:uppercase;letter-spacing:.03em;transition:color .3s;}
+.proc-link:hover{color:var(--dark);}
+
+/* ── CTA SECTION ── */
+.cta-section{padding:80px 48px;background:var(--dark);position:relative;overflow:hidden;}
+.cta-section::before{content:"";position:absolute;top:-50%;right:-10%;width:400px;height:400px;background:radial-gradient(circle,rgba(201,168,76,0.08) 0%,transparent 70%);border-radius:50%;}
+.cta-container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;position:relative;z-index:1;}
+.cta-left h2{font-size:36px;font-weight:700;color:#fff;line-height:1.3;margin-bottom:16px;}
+.cta-left h2 span{color:var(--gold);}
+.cta-left p{font-size:16px;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.8;margin-bottom:32px;}
+.cta-benefits{list-style:none;display:flex;flex-direction:column;gap:14px;}
+.cta-benefits li{display:flex;align-items:center;gap:12px;font-size:15px;font-weight:400;color:rgba(255,255,255,0.75);}
+.cta-benefits li svg{color:var(--gold);flex-shrink:0;}
+.form-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:36px;box-shadow:var(--shadow-card);}
+.form-ttl{font-size:22px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.form-sub{font-size:14px;color:var(--text-muted);font-weight:300;margin-bottom:24px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.fgroup{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.flabel{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);}
+.finput,.fselect,.ftextarea{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:inherit;font-size:14px;font-weight:300;padding:12px 14px;outline:none;transition:border-color .2s,box-shadow .2s;width:100%;}
+.finput:focus,.fselect:focus,.ftextarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
+.ftextarea{height:90px;resize:vertical;}
+.fsubmit{width:100%;background:var(--gold);color:#fff;border:none;border-radius:var(--radius);font-family:inherit;font-size:14px;font-weight:700;padding:14px 32px;cursor:pointer;text-transform:uppercase;letter-spacing:.05em;transition:all .3s;}
+.fsubmit:hover{background:#b8952f;transform:translateY(-2px);}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);padding:56px 48px 28px;}
+.ftr-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,0.08);max-width:1200px;margin:0 auto;}
+.ftr-brand p{font-size:14px;font-weight:300;line-height:1.7;color:rgba(255,255,255,0.4);max-width:280px;margin-top:14px;}
+.ftr-social{display:flex;gap:12px;margin-top:16px;}
+.ftr-social a{width:36px;height:36px;border-radius:var(--radius);background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.5);text-decoration:none;transition:all .3s;}
+.ftr-social a:hover{background:var(--gold);color:#fff;}
+.ftr-ct{font-size:12px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.ftr-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.ftr-links a{font-size:14px;font-weight:300;color:rgba(255,255,255,0.4);text-decoration:none;cursor:pointer;transition:color .2s;}
+.ftr-links a:hover{color:rgba(255,255,255,0.85);}
+.ftr-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;max-width:1200px;margin:0 auto;}
+.ftr-copy{font-size:13px;font-weight:300;color:rgba(255,255,255,0.25);}
+.ftr-copy span{color:var(--gold);}
+
+/* ── WHATSAPP (bottom-left) ── */
+.wa-float{position:fixed;bottom:28px;left:28px;z-index:999999;}
+.wa-btn{width:64px;height:64px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,0.4);transition:all .3s;animation:pulse-wa 3s infinite;}
+.wa-btn:hover{transform:scale(1.08);}
+
+/* ── BACK TO TOP ── */
+.back-top{position:fixed;bottom:28px;right:28px;z-index:999999;width:44px;height:44px;background:var(--dark);color:#fff;border:none;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;visibility:hidden;transition:all .3s;box-shadow:0 2px 10px rgba(0,0,0,0.2);}
+.back-top.visible{opacity:1;visibility:visible;}
+.back-top:hover{background:var(--gold);}
+
+@keyframes pulse-wa{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4)}50%{box-shadow:0 4px 32px rgba(37,211,102,0.65)}}
+
+/* ── RESPONSIVE ── */
+@media(max-width:992px){
+  .top-bar{padding:8px 24px;font-size:12px;}
+  nav{padding:0 24px;}
+  .breadcrumb{padding:16px 24px;}
+  .description{padding:60px 24px;}
+  .desc-highlights{grid-template-columns:1fr;}
+  .procedures{padding:60px 24px;}
+  .procedures-grid{grid-template-columns:1fr;}
+  .cta-section{padding:60px 24px;}
+  .cta-container{grid-template-columns:1fr;}
+  .ftr-top{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  .top-bar{flex-direction:column;gap:6px;text-align:center;}
+  nav{height:60px;}
+  .nav-links{display:none;}
+  .nav-phone{display:none;}
+  .hero{height:50vh;min-height:350px;}
+  .ftr-top{grid-template-columns:1fr;}
+  .frow{grid-template-columns:1fr;}
+}
+@media(max-width:576px){
+  .hero h1{font-size:28px;}
+  .hero-desc{font-size:14px;}
+  .cta-left h2{font-size:28px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP INFO BAR -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+905000000000">+90 500 000 00 00</a></span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><a href="mailto:info@choiceclinic.net">info@choiceclinic.net</a></span>
+  </div>
+  <div class="top-bar-right">
+    <select class="lang-select">
+      <option>EN</option>
+      <option>DE</option>
+      <option>AR</option>
+      <option>RU</option>
+      <option>FR</option>
+      <option>ES</option>
+      <option>NL</option>
+      <option>IT</option>
+    </select>
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<nav id="mainNav">
+  <a class="nav-logo" href="preview_internationalplus_style.html">
+    <img src="images/logo.jpeg" alt="Choice Clinic" style="background:#1b1b1b;padding:4px 12px;border-radius:var(--radius);">
+  </a>
+  <div style="display:flex;align-items:center;gap:8px;height:100%;">
+    <ul class="nav-links">
+      <li><a href="preview_internationalplus_style.html">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Operations</a></li>
+      <li><a href="#">Gallery</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="nav-phone">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <a href="tel:+905000000000" style="color:inherit;text-decoration:none;">+90 500 000 00 00</a>
+    </div>
+    <a href="#consultation" class="nav-cta">Free Consultation</a>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="preview_internationalplus_style.html">Home</a>
+  <span>/</span>
+  <a href="#">Operations</a>
+  <span>/</span>
+  Bariatric Surgery
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1>Bariatric <span>Surgery</span></h1>
+    <p class="hero-desc">Transform your life with world-class weight loss surgery in Istanbul. Expert bariatric surgeons, modern hospitals, and all-inclusive care packages.</p>
+    <div class="hero-actions">
+      <a href="#consultation" class="btn-primary">Book Consultation</a>
+      <a href="#procedures" class="btn-secondary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        View Procedures
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- DESCRIPTION -->
+<section class="description">
+  <div class="desc-container">
+    <h2>Weight Management <span>Procedures</span> in Istanbul</h2>
+    <p>Choice Clinic connects you with Istanbul's most experienced bariatric surgeons, providing life-changing weight loss procedures in internationally accredited hospitals. Our comprehensive approach covers every stage of your journey, from initial consultation and pre-operative assessments to surgery and long-term post-operative care.</p>
+    <p>Istanbul has become a leading destination for bariatric surgery, offering advanced minimally invasive techniques at a fraction of the cost compared to the UK and US. Our all-inclusive packages cover hospital stay, surgeon fees, transfers, accommodation, and dedicated aftercare support, so you can focus entirely on your transformation.</p>
+
+    <div class="desc-highlights">
+      <div class="highlight-item">
+        <div class="highlight-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="highlight-text">
+          <h4>Experienced Surgeons</h4>
+          <p>Board-certified bariatric surgeons with thousands of successful procedures and international training.</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <div class="highlight-text">
+          <h4>Modern Hospitals</h4>
+          <p>JCI-accredited facilities equipped with the latest laparoscopic and robotic surgical technology.</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="highlight-text">
+          <h4>Comprehensive Care</h4>
+          <p>Full pre-operative evaluation, nutritional guidance, and 12-month post-operative follow-up programme.</p>
+        </div>
+      </div>
+      <div class="highlight-item">
+        <div class="highlight-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div class="highlight-text">
+          <h4>All-Inclusive Packages</h4>
+          <p>Surgery, hospital stay, transfers, hotel accommodation, and personal coordinator included in one price.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCEDURES -->
+<section class="procedures" id="procedures">
+  <div class="section-header">
+    <div class="section-label">Our Procedures</div>
+    <h2 class="section-title">Bariatric <span>Surgery</span> Options</h2>
+    <p class="section-sub">Personalised surgical and non-surgical solutions to help you achieve lasting weight loss and improved health.</p>
+  </div>
+
+  <div class="procedures-grid">
+    <!-- Gastric Sleeve -->
+    <div class="proc-card">
+      <div class="proc-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 0 1 10 10c0 5.523-4.477 10-10 10S2 17.523 2 12"/><path d="M2 12c0-2 1.5-4 4-4s4 2 4 4"/><path d="M12 8v8M8 12h8"/></svg>
+      </div>
+      <h3>Gastric Sleeve</h3>
+      <p>Also known as sleeve gastrectomy, this procedure removes approximately 80% of the stomach, creating a smaller tube-shaped stomach. Performed using minimally invasive laparoscopic technique, it significantly reduces appetite and promotes substantial, long-term weight loss with a relatively short recovery period.</p>
+      <a href="#consultation" class="proc-link">Get a Quote <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+
+    <!-- Gastric Balloon -->
+    <div class="proc-card">
+      <div class="proc-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="10" r="8"/><path d="M10 18h4v3a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-3z"/></svg>
+      </div>
+      <h3>Gastric Balloon</h3>
+      <p>A non-surgical, temporary solution where a soft silicone balloon is placed in the stomach via endoscopy. The balloon reduces stomach capacity and helps patients feel full sooner, promoting controlled weight loss over a 6 to 12-month period. Ideal for patients seeking a less invasive approach to kick-start their weight loss journey.</p>
+      <a href="#consultation" class="proc-link">Get a Quote <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+
+    <!-- Gastric Bypass -->
+    <div class="proc-card">
+      <div class="proc-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v6M12 18v4M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M18 12h4M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/></svg>
+      </div>
+      <h3>Gastric Bypass</h3>
+      <p>Roux-en-Y gastric bypass reroutes the digestive system by creating a small stomach pouch and connecting it directly to the small intestine. This dual mechanism restricts food intake and reduces calorie absorption, delivering maximum weight loss results. It is one of the most effective long-term solutions for severe obesity.</p>
+      <a href="#consultation" class="proc-link">Get a Quote <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+
+    <!-- Mini Gastric Bypass -->
+    <div class="proc-card">
+      <div class="proc-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <h3>Mini Gastric Bypass</h3>
+      <p>A simplified version of the traditional gastric bypass using a single anastomosis (connection) between the stomach and intestine. This streamlined technique delivers highly effective weight loss results with a shorter operative time, reduced complexity, and faster recovery compared to the standard Roux-en-Y procedure.</p>
+      <a href="#consultation" class="proc-link">Get a Quote <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA + CONSULTATION FORM -->
+<section class="cta-section" id="consultation">
+  <div class="cta-container">
+    <div class="cta-left">
+      <h2>Ready to Start Your <span>Weight Loss Journey?</span></h2>
+      <p>Take the first step towards a healthier, more confident you. Our medical coordinators will guide you through every detail, from choosing the right procedure to planning your trip to Istanbul.</p>
+      <ul class="cta-benefits">
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Free initial consultation and BMI assessment
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          All-inclusive pricing with no hidden fees
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          English-speaking personal medical coordinator
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          12-month post-operative follow-up programme
+        </li>
+        <li>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          VIP airport transfers and hotel accommodation
+        </li>
+      </ul>
+    </div>
+    <div class="form-card">
+      <div class="form-ttl">Request a Consultation</div>
+      <div class="form-sub">Fill in your details and we will contact you within 24 hours.</div>
+      <form onsubmit="return false;">
+        <div class="frow">
+          <div class="fgroup">
+            <label class="flabel">First Name</label>
+            <input class="finput" type="text" placeholder="John">
+          </div>
+          <div class="fgroup">
+            <label class="flabel">Last Name</label>
+            <input class="finput" type="text" placeholder="Doe">
+          </div>
+        </div>
+        <div class="frow">
+          <div class="fgroup">
+            <label class="flabel">Email</label>
+            <input class="finput" type="email" placeholder="you@email.com">
+          </div>
+          <div class="fgroup">
+            <label class="flabel">Phone / WhatsApp</label>
+            <input class="finput" type="tel" placeholder="+44 7000 000000">
+          </div>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Procedure of Interest</label>
+          <select class="fselect">
+            <option value="">Select a procedure</option>
+            <option>Gastric Sleeve</option>
+            <option>Gastric Balloon</option>
+            <option>Gastric Bypass</option>
+            <option>Mini Gastric Bypass</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label class="flabel">Message</label>
+          <textarea class="ftextarea" placeholder="Tell us about your goals, current weight, any medical conditions..."></textarea>
+        </div>
+        <button class="fsubmit" type="submit">Send My Request</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ftr-top">
+    <div class="ftr-brand">
+      <div style="display:flex;align-items:center;">
+        <img src="images/logo.jpeg" alt="Choice Clinic" style="height:50px;width:auto;border-radius:var(--radius);">
+      </div>
+      <p>World-class medical care in Istanbul, coordinated entirely in English for UK and US patients.</p>
+      <div class="ftr-social">
+        <a href="#" aria-label="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="#" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" aria-label="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12z"/></svg></a>
+        <a href="#" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <div class="ftr-ct">Services</div>
+      <ul class="ftr-links">
+        <li><a>Dental Treatment</a></li>
+        <li><a>Hair Transplant</a></li>
+        <li><a>Face Aesthetic</a></li>
+        <li><a href="bariatric.html">Bariatric Surgery</a></li>
+        <li><a>Eye Surgery</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ftr-ct">Company</div>
+      <ul class="ftr-links">
+        <li><a>About Us</a></li>
+        <li><a>How It Works</a></li>
+        <li><a>Patient Stories</a></li>
+        <li><a>Gallery</a></li>
+        <li><a>Blog</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="ftr-ct">Contact</div>
+      <ul class="ftr-links">
+        <li><a>info@choiceclinic.net</a></li>
+        <li><a>+90 500 000 00 00</a></li>
+        <li><a>WhatsApp Us</a></li>
+        <li><a>Istanbul, Turkey</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ftr-bottom">
+    <div class="ftr-copy">&copy; 2026 <span>Choice Clinic</span>. All rights reserved.</div>
+    <div class="ftr-copy">Istanbul, Turkey &middot; <span>info@choiceclinic.net</span></div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT (bottom-left) -->
+<div class="wa-float">
+  <a href="https://wa.me/905000000000" target="_blank" class="wa-btn" title="Chat with us on WhatsApp">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+</div>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" title="Back to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+// Nav shadow on scroll
+const nav = document.getElementById('mainNav');
+const backTop = document.getElementById('backTop');
+
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  nav.classList.toggle('scrolled', y > 0);
+  backTop.classList.toggle('visible', y > 300);
+});
+
+// Back to top
+backTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>
