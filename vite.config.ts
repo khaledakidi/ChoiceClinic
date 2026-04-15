@@ -5,8 +5,6 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Served at https://khaledakidi.github.io/ChoiceClinic/ on GitHub Pages
-  base: mode === "production" ? "/ChoiceClinic/" : "/",
   server: {
     host: "::",
     port: 8080,
