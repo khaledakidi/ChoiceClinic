@@ -11,6 +11,7 @@ import HairPage from "./pages/HairPage.tsx";
 import FacePage from "./pages/FacePage.tsx";
 import BariatricPage from "./pages/BariatricPage.tsx";
 import EyePage from "./pages/EyePage.tsx";
+import AwardsPage from "./pages/AwardsPage.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/face" element={<FacePage />} />
               <Route path="/bariatric" element={<BariatricPage />} />
               <Route path="/eye" element={<EyePage />} />
+              <Route path="/awards" element={<AwardsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

@@ -4,8 +4,8 @@ const StatsSection = () => {
   const { t } = useI18n();
 
   const stats = [
-    { value: "500+", label: t("stats.patients") },
-    { value: "70%", label: t("stats.savings") },
+    { value: "5", label: "International Accreditations" },
+    { value: "1st", label: "In Turkey — JCI & TEMOS" },
     { value: "5", label: t("stats.specialities") },
     { value: "24/7", label: t("stats.support") },
   ];

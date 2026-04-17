@@ -27,6 +27,7 @@ const Navbar = () => {
     { label: "Services", href: "#services", type: "anchor" as const },
     { label: "Specialists", href: "#specialists", type: "anchor" as const },
     { label: "Before & After", href: "#gallery", type: "anchor" as const },
+    { label: "Awards", href: "/awards", type: "route" as const },
     { label: "Contact", href: "#contact", type: "anchor" as const },
   ];
 
@@ -148,15 +149,25 @@ const Navbar = () => {
 
           {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-10 xl:gap-14">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-xs font-bold uppercase tracking-[0.28em] text-foreground/85 hover:text-primary transition-colors duration-300"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.type === "route" ? (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="text-xs font-bold uppercase tracking-[0.28em] text-foreground/85 hover:text-primary transition-colors duration-300"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-xs font-bold uppercase tracking-[0.28em] text-foreground/85 hover:text-primary transition-colors duration-300"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </nav>
         </div>
       </div>
@@ -171,16 +182,27 @@ const Navbar = () => {
           }}
         >
           <div className="container mx-auto px-4 py-6 space-y-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="block px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-[0.2em] text-foreground hover:text-primary transition-colors duration-300"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.type === "route" ? (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-[0.2em] text-foreground hover:text-primary transition-colors duration-300"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-4 py-3 rounded-lg text-sm font-bold uppercase tracking-[0.2em] text-foreground hover:text-primary transition-colors duration-300"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
 
             <div className="pt-2 px-4 space-y-2">
               <Link
